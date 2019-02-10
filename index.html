@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Bertrand&#39;s Blog</title>
+  <meta name="author" content="Bertrand Huang">
+  
+  <meta name="description" content="better late than never">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Bertrand&#39;s Blog">
+
+  
+    <meta property="og:image" content="">
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Bertrand&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+</html>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Bertrand&#39;s Blog</a></h1>
+  <h2><a href="/">better late than never</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2019-02-10T14:13:49.000Z"><a href="/2019/02/10/区块链简介/">2019-02-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/02/10/区块链简介/">blockchain intro</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="区块链基础简介"><a href="#区块链基础简介" class="headerlink" title="区块链基础简介"></a>区块链基础简介</h1><h2 id="从数据说起"><a href="#从数据说起" class="headerlink" title="从数据说起"></a>从数据说起</h2><p>数字化时代的兴起，使得很多现实中的物质都变成数字化。比如有这样的一个数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">12,0000.00</span><br></pre></td></tr></table></figure></p>
+<p>这个数据我们看不出来它是干什么的，需要和特定的场合结合起来才会产生业务上的意义。比如说为数据增加以下属性    </p>
+<ol>
+<li>业务属性</li>
+<li>属主属性</li>
+<li>公信属性</li>
+</ol>
+<p>比如说这是2018年4月8号我在平安银行上面的银行账户余额，这时候三者就会变成    </p>
+<ol>
+<li>业务属性：银行存款</li>
+<li>属主属性：属于我的存款，可以通过账密可以证明我拥有这个余额</li>
+<li>公信属性：银行作为中心机构为我拥有这个余额背书</li>
+</ol>
+<h2 id="创建去中心化公信力的构想"><a href="#创建去中心化公信力的构想" class="headerlink" title="创建去中心化公信力的构想"></a>创建去中心化公信力的构想</h2><p>中心化机构会带来信用风险，是否可以通过去中心化的方式进行信用背书呢？</p>
+<p>回到刚才那个问题，我们现在想撇开银行来证明自己拥有这个数字，首先在验证属主属性的时候需要进行改革，因为没有中心化机构为了做帐密验证，这个在目前计算机科学技术中很容易解决－－非对称加密算法。我们可以对这个数字进行私钥签名，然后把数字，私钥签名及公钥一起发布出去，如下面的三元组：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(12,0000.00,sign,publicKey)</span><br></pre></td></tr></table></figure></p>
+<p>别人通过公钥可以验证这个数字是否被篡改，但这依旧没法证明我就是这串数字的属主，因为攻击者可以用自己的公钥和私钥签名进行更替。   </p>
+<p>其实可以使用一个非常简单粗暴的方案来解决上面的三元组数据被串改的问题，如果这个三元组写在一个公共透明的账本里面容易被攻击者篡改（比如说本身攻击者就控制了这个账本记账功能），那么在三元组数据产生之初，就把这三元组数据写到多个分布在世界各地的公共透明的账本，写得越多，地域越分散，篡改难度越大，可信度不就越高了吗？为了达到上面一点，需要解决下面几个问题：    </p>
+<ol>
+<li>记账者为什么帮忙记账</li>
+<li>如何控制合法记账的数量</li>
+<li>如果验证记账的合法性</li>
+<li>其他记账者为什么要承认此次记账者提出的合法记账请求。</li>
+<li>记账信息如何保持一致性</li>
+</ol>
+<p>第一个问题，我们可以设立一种经济激励模型，比如说如果你帮忙记账给你一些奖励，比如说奖励你50个数字货币，目前比特币，以太坊这些公有链都是这种经济激励模型（当然除了产生区块的奖励以外还可以赚取交易手续费之类的费用）。   </p>
+<p>第二个问题，由于产生合法记账可以带来经济收益，如果不提高门槛，记账者都会争先恐后地提交合法记账，所以需要设置一下产生合法记账的门槛，比如说需要产出一次合法记账，需要解决一条数学上很难的题目，例如通过不断增加一个随机数然后计算合法记账信息的hash值，直到hash值小于某个数字为止，这样可以有效减低一段时间内的合法记账的数量。同时由于一个时间段可以有很多笔记账的需求，为了进一步减少合法记账产生的频率，可以把一个时间段内收到的记账需求统一到一个记账区块中进行合法性计算。</p>
+<p>第三个问题与第二个问题息息相关，基本设计就是可以在很短时间内进行验证，如果采用通过随机数计算小于某个hash的值，只要拿到随机数和合法记账信息可以很方便校验出来。</p>
+<p>第四个问题其实不完全是一个技术方面的问题，而是一个约定，由于在产生合法记账中，产出记账者花费算力的代价而且有计算机算法作为公信保证，基于一致利益原则诚实的其他记账者会接收合法记账。   </p>
+<p>第五个问题，实际上所有记账者的账本最终都是同一本账本，就是说里面的内容会完全一样，也就是说某个时间所产生合法记账需要告知所有人。为达到这个目的，记账者之间应该是一个联通的网络，例如在计算机技术中P2P网络就有这样的特征，所以这里可以用P2P网络来同步合法记账区块。  </p>
+<p>解决上述问题，实际上产生基于共同账本的公信力网络，可以给它们起一个名字：区块链网络，由于运行在公有网络上，更准确的称呼为公有区块链网络。</p>
+<h2 id="创世区块"><a href="#创世区块" class="headerlink" title="创世区块"></a>创世区块</h2><p>回到刚才三元组数据的问题，如果这个三元组写入到公共账本中，表示我拥有12,0000.00个此区块链的代币，这是否会有问题？想想银行存款，基本都是由其他账号转账而来，所以为了得到合法账本上的某人的代币信息，需要把三元组数据扩展为五元组数据:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Other_address, My_address, 12,0000.00, sign, publicKey)</span><br></pre></td></tr></table></figure></p>
+<p>也就是说实际上所有的代币余额都是一条交易链，那交易链的源头是什么？回忆一下，我们有一个公共账本，但这个账本里面的区块是有限，总有第一个区块，也就是说这是交易链的源头。第一个区块给它取一个好听的名字，叫创世区块。那创世块可以做哪些东西？我们可以拿以太坊的创世块做为一个例子窥探一下，  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  difficulty: 17179869184,</span><br><span class="line">  extraData: &quot;0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa&quot;,</span><br><span class="line">  gasLimit: 5000,</span><br><span class="line">  gasUsed: 0,</span><br><span class="line">  hash: &quot;0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3&quot;,</span><br><span class="line">  logsBloom: &quot;0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000&quot;,</span><br><span class="line">  miner: &quot;0x0000000000000000000000000000000000000000&quot;,</span><br><span class="line">  mixHash: &quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;,</span><br><span class="line">  nonce: &quot;0x0000000000000042&quot;,</span><br><span class="line">  number: 0,</span><br><span class="line">  parentHash: &quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;,</span><br><span class="line">  receiptsRoot: &quot;0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421&quot;,</span><br><span class="line">  sha3Uncles: &quot;0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347&quot;,</span><br><span class="line">  size: 540,</span><br><span class="line">  stateRoot: &quot;0xd7f8974fb5ac78d9ac099b9ad5018bedc2ce0a72dad1827a1709da30580f0544&quot;,</span><br><span class="line">  timestamp: 0,</span><br><span class="line">  totalDifficulty: 17179869184,</span><br><span class="line">  transactions: 8893,</span><br><span class="line">  transactionsRoot: &quot;0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421&quot;,</span><br><span class="line">  uncles: []</span><br><span class="line">&#125;</span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line">以太坊创世区块信息比较多，我们重点关注transactions，可以看出以太坊创世区块做了8893笔交易，凭空产生了很多以太币。如果上面的五元组数据可以直接写入到创世区块中，我凭空就多了12,0000以太币，那我现在就不需要再这里写文章了。   </span><br><span class="line"></span><br><span class="line">再回过来我们看看这五元组数据，实际上并不需要这么多的数据。区块链上的存储很昂贵（想一下多一个字节，然后同步到几万个节点的话就多了几万个字节），可以直接把公钥当成地址用（当然公钥如果太长还得进行一些编码，比特币的地址），然后sign变成其他人的私钥签名即可，也就是说变成四元组写入区块即可</span><br></pre></td></tr></table></figure>
+<p>(Other_address, My_address, 12,0000, Other_sign)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 区块产生，广播及同步</span><br><span class="line"></span><br><span class="line">创世区块已经产生了，如果进行同步呢？实际上刚刚开始运行之初，创世区块是随着区块链节点程序一起发布的。比如说以太坊刚开始之初就是由以太坊团队成员使用同一创世区块先运行起来几个节点，然后进行合法记账的竞争，用比较专业的名词就是挖矿，挖矿的人就是矿工。矿工通过挖矿产生创世区块以外的合法区块之后需要进行全网广播，其他矿工需要同步该区块并进行下一轮的挖矿竞争。  </span><br><span class="line"></span><br><span class="line">如图所示，这是一个比较典型的区块链网络：    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">客户端（如钱包之类的应用）产生一笔交易，比如我到黑市上购买一批数据，需要转账一笔大概2000个代币给到Hacker_A，同时设置好手续费（注意手续费在区块链中并不一定需要），然后使用私钥签名把交易A发出去。接下来大概有这么几步  </span><br><span class="line"></span><br><span class="line">1. 发送交易A到连接的节点，然后广播到挖矿节点</span><br><span class="line">2. 挖矿节点验证交易A的信息，如果合法则放到待打包交易池中</span><br><span class="line">3. 挖矿节点把交易A和其他交易组成一个区块，然后尝试进行挖矿</span><br><span class="line">4. 成功产出包含交易A的区块A，马上广播出去，并写入本地账本同时启动下一轮挖矿</span><br><span class="line">5. 其他节点接到区块A，对区块A相关信息进行校验，合法则写入本地账本同时启动下一轮挖矿</span><br><span class="line"></span><br><span class="line">其实上面隐藏了一个很重要的信息，就是挖矿是一轮又一轮，一轮下来只会产生一个最终写入主区块链的区块，既然是这样子，可以为每一轮产生的区块编号，成为区块高度值。当然上面的描述是很理想的情况，实际情况会复杂很多，因为在一个庞大的网络中，在一轮挖矿过程中会产生两个或两个以上的合法区块。当挖矿节点收到两个个高度相同的区块的时候，挖矿节点会保持两个相同高度的区块，从而使本地账本成为临时分叉情况，然后根据特定策略选择两个区块中间的一个，然后进行下一轮挖矿，直到后面发现更长的区块链后才会把告别短暂分叉的情况，继续在主链上挖矿。  </span><br><span class="line"></span><br><span class="line">随着这条区块链蓬勃发展，越来越多的矿工加进来，他们开始运行区块链节点程序，同步区块并开始挖矿。中间的过程如下所示：  </span><br><span class="line"></span><br><span class="line">1. 随机连接写死在节点程序的初始节点</span><br><span class="line">2. 发送版本号和区块高度信息</span><br><span class="line">3. 获取关联节点的链接列表</span><br><span class="line">4. 获取节点间目前最新高度</span><br><span class="line">5. 分批获取区块信息</span><br><span class="line">6. 完成同步到最新高度的区块</span><br><span class="line">7. 开始接受交易并且挖矿</span><br><span class="line"></span><br><span class="line">至此一个区块链网络就已经搭建起来。</span><br><span class="line"></span><br><span class="line">## 区块链的数据结构</span><br><span class="line"></span><br><span class="line">接下来看一下区块链的数据结构。既然是区块链，自然而然是一个链式结构，区块之间是通过父hash和高度值关联起来。区块里面的信息基本如下：</span><br></pre></td></tr></table></figure></p>
+<p>Height: 高度<br>TimeStamp： 时间戳<br>Hash：区块hash值<br>Parent Hash： 父区块hash值<br>Difficulty：难度值<br>Size：区块大小<br>Transactions：交易列表<br>Version: 版本号<br>Miner: 矿工地址<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">实际上区块链区块实现过程中差异化还是有不少差异，比如比特币的区块信息如下所示,[比特币某个区块信息](https://blockchain.info/rawblock/00000000000000027e7ba6fe7bad39faf3b5a83daed765f05f7d1b71a1632249)：</span><br></pre></td></tr></table></figure></p>
+<p>{<br>“size” : 43560,<br>“version” : 2,<br>“previousblockhash” :<br>    “00000000000000027e7ba6fe7bad39faf3b5a83daed765f05f7d1b71a1632249”,<br>“merkleroot” :<br>    “5e049f4030e0ab2debb92378f53c0a6e09548aea083f3ab25e1d94ea1155e29d”,<br>“time” : 1388185038,<br>“difficulty” : 1180923195.25802612,<br>“nonce” : 4215469401,<br>“tx” : [<br>    “257e7497fb8bc68421eb2c7b699dbab234831600e7352f0d9e6522c7cf3f6c77”,</p>
+<p> [… many more transactions omitted …]</p>
+<pre><code>&quot;05cfd38f6ae6aa83674cc99e4d75a1458c165b7ab84725eda41d018a09176634&quot;
+</code></pre><p>]</p>
+<p>}<br><code>`</code>  </p>
+<p>为了防止区块被篡改，使用了merkle tree算法来保证交易数据一致性（merkle tree算法不在这里讲了），同时再算出总体的hash值，比特币区块链账本如下所示：    </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1785959-778f551c409faeba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">  </p>
+<p>其他区块链的数据结构与比特币类似，在这里就不多说了。  </p>
+<h2 id="区块链的应用场景"><a href="#区块链的应用场景" class="headerlink" title="区块链的应用场景"></a>区块链的应用场景</h2><p>回顾一下刚开始的四元组数据，通过写入创世区块的方式，使我拥有12,0000个代币，一笔转账之后，Hacker_A也拥有2000代币。随着区块链知识及网络的普及，后面我跟别人说我拥有11,8000个代币的时候，普通人民群众甚至已经开始会相信我的话，而只是是没有类似银行的中心化机构什么事情。  </p>
+<p>其实有很多区块链的讲师们都喜欢把区块链总结成以下的特征：   </p>
+<ol>
+<li>去中心化</li>
+<li>不可篡改性</li>
+<li>开放性</li>
+<li>一致性</li>
+<li>自治性<br>……</li>
+</ol>
+<p>正是这些特质，可以使区块链广泛应用到各个领域。</p>
+<h3 id="银行业金融管理-成功案例：Ripple"><a href="#银行业金融管理-成功案例：Ripple" class="headerlink" title="银行业金融管理(成功案例：Ripple)"></a>银行业金融管理(成功案例：Ripple)</h3><p>举个购买理财的例子，比如说我们在某个平台购买了一笔理财，资金流程会是这个样子：    </p>
+<ol>
+<li>调用第三方支付进行扣款处理，第三方支付公司记录一笔账</li>
+<li>第三方支付公司调用超级网银，超级网银记一笔账</li>
+<li>调用某平台接口，某平台记一笔账 </li>
+<li>第二天，三方再进行对账</li>
+<li>对账无误后再进行结算</li>
+</ol>
+<p>这个过程除了机构间相对不信任以外，更多是在分布式网络的情况下能达到一致性的怀疑，而区块链技术恰恰可以解决这个问题。因为一旦写入，数据基本就是一致性的可信数据，大大减少网络维护，差错核查，清结算成本。</p>
+<h3 id="权属管理-成功案例：Factom"><a href="#权属管理-成功案例：Factom" class="headerlink" title="权属管理(成功案例：Factom)"></a>权属管理(成功案例：Factom)</h3><p>区块链技术可以用于产权，版权等所有权的管理和追踪。其中包括汽车，房屋，艺术品等各种贵重务必的交易等，也包括数字出版物等。<br>这边有一个比较成功的案例，就是公正通(Factom)，它与美国政府合作，利用区块链技术革新商业社会和政府部门的数据管理和数据记录方式。包括审计系统，医疗信息记录，供应链管理，法律应用等。</p>
+<h3 id="共享经济（成功案例：Airbnb评价系统）"><a href="#共享经济（成功案例：Airbnb评价系统）" class="headerlink" title="共享经济（成功案例：Airbnb评价系统）"></a>共享经济（成功案例：Airbnb评价系统）</h3><p>共享经济正在冲击这各个垂直领域，例如出行市场的Uber，房屋租赁市场的Airbnb。但共享经济有三个难题  </p>
+<ol>
+<li>共享过程成本过高</li>
+<li>用户行为评价难</li>
+<li>共享服务管理难</li>
+</ol>
+<p>针对第二个问题，实际上区块链可以较好的解决第二个问题。</p>
+<h3 id="供应链物流（成功案例：马士基跨境供应链解决方案）"><a href="#供应链物流（成功案例：马士基跨境供应链解决方案）" class="headerlink" title="供应链物流（成功案例：马士基跨境供应链解决方案）"></a>供应链物流（成功案例：马士基跨境供应链解决方案）</h3><p>供应链行业会设计诸多实体，实体之间存在大量复制的协作和沟通。传统模式下，不同实体各自保存各自的供应链信息，严重缺乏透明度，而且一旦出现问题，难以追查和处理。<br>通过区块链，各方可以获得一个透明可靠的统一信息平台，可以实时查看状态，追溯物品的生产和运送过程，当发生纠纷时，方便举证和追查</p>
+<h3 id="物联网"><a href="#物联网" class="headerlink" title="物联网"></a>物联网</h3><p>物联网与区块链结合比较有意识，本身两者之间的网络结构就很类似。例如，为物联网上每一个设备关联一下区块链的账号，用户通过向账户中支付费用可以租借设备，执行相关动作。</p>
+<h3 id="其他场景"><a href="#其他场景" class="headerlink" title="其他场景"></a>其他场景</h3><ol>
+<li>存储（Storj）</li>
+<li>医疗（平安慧颖项目）</li>
+<li>投票（银链科技ELK）</li>
+<li>通信和社交（BitMessage）</li>
+<li>预测（Augur）</li>
+<li>游戏（CryptoKitties）</li>
+</ol>
+<h2 id="区块链技术当前的问题"><a href="#区块链技术当前的问题" class="headerlink" title="区块链技术当前的问题"></a>区块链技术当前的问题</h2><p>区块链从2009年之初发展到现在，不过短短9年，技术方面还是处于初期阶段，还有很多方面需要进行完善，比如下面所提高的一些问题：</p>
+<ol>
+<li>并发性能问题</li>
+<li>存储容量问题</li>
+<li>隐私保护问题</li>
+<li>监管问题</li>
+</ol>
+<h3 id="并发性能问题"><a href="#并发性能问题" class="headerlink" title="并发性能问题"></a>并发性能问题</h3><p>区块链技术之所以无法大规模落地，有一个比较大的原因是因为并发性能太弱。拿比特币来说，一秒最多只能支持7笔交易（比特币能承载的交易量受区块大小限制，例如目前每个区块上限1MB，每10分钟1个区块，以一个交易0.25KB计算，每秒平均能打包1000/0.25/60/10=6.67个交易，这也是很多资料提到比特币每秒处理7笔交易的由来），而目前的visa系统每秒可以高达上万笔。再拿以太坊而言，CryptoKitties一款简单的宠物养成游戏就导致以太坊网络长期的拥堵。  </p>
+<p>针对区块链性能比较低下的情况，实际上目前有很多技术应该在尝试解决这些问题    </p>
+<ol>
+<li>高效网络结构</li>
+<li>高效加密算法</li>
+<li>高效共识算法</li>
+<li>侧链技术</li>
+<li>分片技术</li>
+</ol>
+<h3 id="存储容量问题"><a href="#存储容量问题" class="headerlink" title="存储容量问题"></a>存储容量问题</h3><p>待写</p>
+<h3 id="隐私保护问题"><a href="#隐私保护问题" class="headerlink" title="隐私保护问题"></a>隐私保护问题</h3><p>在区块链公有链中，每一个参与者都能够获得完整的数据备份，所有交易数据都是公开和透明的，这个区块链的优势特点，但另一方面，对于很多区块链应用方来说，这个特点又是致命的。因为很多时候，不仅仅用户本身希望他的帐户隐私和交易信息被保护，就商业机构来说，很多帐户和交易信息更是这些机构的重要资产和商业机密，不希望公开分享給同行。</p>
+<p>拿比特币来说，通过隔断交易地址和地址持有人真实身份的关联，来达到匿名的效果。所以虽然能够看到每一笔转账记录的发送方和接受方的地址，但无法对应到现实世界中的具体某个人。但这样的保护是很弱的，通过观察和跟踪区块链的信息，通过地址ID、IP信息等还是可以追查到帐户和交易的关联性。</p>
+<p>为了解决区块链的隐私保护问题，目前有混币、环签名、同态加密、零知识证明等几种方式。</p>
+<ol>
+<li><p>混币原理(CoinJoin)：混币原理是割裂输入地址和输出地址之间的关系。在一个交易中，假如有很多人参与，其中包括大量输入和输出，这样会比较难在输入和输出中找出每个人的对应对，这样一来，输入与输出之间的联系被事实上割裂。多次混币、每次少量币，效果更好。</p>
+</li>
+<li><p>环签名：环签名是一种简化的类群签名，它因为签名由一定的规则组成一个环而得名。在环签名方案中，环中一个成员利用他的私钥和其他成员的公钥进行签名，但却不需要征得其他成员的允许，而验证者只知道签名来自这个环，但不知到谁是真正的签名者。环签名解决了对签名者完全匿名问题，环签名允许一个成员代表一组人进行签名而不泄漏签名者的信息。在暗网币中，它的环签名是块链上的混币服务，这种混币具有相同金额的输入，并且使用了多个别人的公钥，只知道是从这一群人中的一个发送的，但无法判断是哪一个，也无法通过金额分析来判断输入输出对。</p>
+</li>
+<li><p>同态加密：同态加密是一种无需对加密数据进行提前解密就可以执行计算的方法。它提供了一种急需的方法，能够在原有基础上使用区块链技术。通过使用同态加密技术在区块链上存储数据可以达到一种完美的平衡，不会对区块链属性造成任何重大的改变。也就是说，区块链仍旧是公有区块链。然而，区块链上的数据将会被加密，因此照顾到了公有区块链的隐私问题，同态加密技术使公有区块链具有私有区块链的隐私效果。</p>
+</li>
+<li><p>零知识证明（ZKPs）： ZKP是一种密码学技术，是一种在无需泄露数据本身情况下证明某些数据运算的一种零知识证明，允许两方（证明者和验证者）来证明某个提议是真实的，而且无需泄露除了它是真实的之外的任何信息。在密码学货币和区块链中，这通常是指交易信息数据。Zcash和Zcoin都引入的零知识证明，Zcoin和Zcash是仅存的两个使用零知识证明而达到零知识级匿名的加密货币。</p>
+</li>
+</ol>
+<p>在联盟链中，除了在算法做处理外，还有其他一些特别的隐私数据保护方法。</p>
+<ol>
+<li><p>Enigma系统的方式，它将数据分解成碎片，然后使用一些巧妙的数学方法对这些数据进行掩盖。单独从每一碎片获知数据是不可能的，你不可能重新获得有关的原始数据。因为很多商业数据非常敏感，所以机构不能轻易把数据分享出来做研究，但是如果只是使用机器学习模型或者预测模型来运行特定的数据分析的话，就不会有这种担忧了，这将是突破性的。</p>
+</li>
+<li><p>很多联盟链都允许系统的终端用户控制他与环境交互和共享的信息，要求它的交易得其他企业不可见，而他的行业合作伙伴无权分享机密信息。如在fabric中交易隐私是通过非授权用户的两个属性来实现的，一个是交易匿名，交易的所有者隐藏在一个被称为匿名集的组建中；另一个是交易不可关联，同一用户的两个或多个交易不能被关联起来。</p>
+</li>
+</ol>
+<h3 id="监管问题"><a href="#监管问题" class="headerlink" title="监管问题"></a>监管问题</h3><p>区块链透明化、去中心化的特点，在政府、监管者甚至交易层面，都很难被完全接受。那么区块链应该如何让政府和监管机构适当地参与到里面的监管，又不损害到商业机构的利益和避免降低效率呢？</p>
+<p>在fabric系统中，总账可以按照规定规则来审计全部或部分总账分录。在与参与者合作中，审计员可以通过基于时间的证书来获得总账的查看，连接交易来提供实际的资产操作。fabric利用了密钥的层级可以控制将给予审计员检查某些交易，某组交易的审计权限，只披露给审计实体最相关的密钥来提供控制审计的可能性。不是系统的成员的应用审计人员，可以给予被动的观察区块链数据的手段，同时保证给予他们只是为了与被审计应用程序相关的交易。</p>
+<p>Corda推出时候就定位为用于记录、管理和同步受监管金融机构之间的金融协议，它直接设计出负责监管与监督观察作业的节点，监管者也在Corda账本上，交易信息经由特定交易方来验证，不需由一大群与该交易无关的验证者。</p>
+<p>量子链为监管者的角色设计了很多可选项，引入数字身份和第三方征信平台，设计一种新的合约类型—主控合约，把监管者的角色引入，同时监管者可以作为 Qtum系统中的喻言和数据源的提供者。</p>
+<p>Chain为能支持大规模金融应用而打造，在运行获得许可的区块链网络的同时，达到关于金融服务行业的严格监管、安全和隐私要求。Chain的私密解决方案对区块链数据进行加密，并让相关对手方和监管者进行有选择的读取。</p>
+<p>区块链的监管，在某种程序上是促进区块链的商业应用更好落地和提供合规性的保护，但如果过度监管也可能毁掉区块链，需要把握好尺度。同时监管机构也应紧追创新步伐，以开放和包容的态度进行有效的新形式的监管。</p>
+<h3 id="参考文档列表"><a href="#参考文档列表" class="headerlink" title="参考文档列表"></a>参考文档列表</h3><ol>
+<li><a href="http://book.8btc.com/master_bitcoin" target="_blank" rel="noopener">精通比特币</a></li>
+<li><a href="http://yuedu.163.com/source/e25a5b514c784c2eb5b71d9ce5d24f5a_4" target="_blank" rel="noopener">区块链原理、设计与应用</a></li>
+<li><a href="https://blog.csdn.net/elwingao/article/details/53173213" target="_blank" rel="noopener">解决区块链三大问题的利器</a></li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:bertrand319.github.io">
+  </form>
+</div>
+
+  
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2019 Bertrand Huang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
