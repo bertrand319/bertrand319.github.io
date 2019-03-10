@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Git usage specification | Bertrand&#39;s Blog</title>
+  <meta name="author" content="Bertrand Huang">
+  
+  <meta name="description" content="better late than never">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Git usage specification">
+  <meta property="og:site_name" content="Bertrand&#39;s Blog">
+
+  
+    <meta property="og:image" content="">
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Bertrand&#39;s Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+</html>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Bertrand&#39;s Blog</a></h1>
+  <h2><a href="/">better late than never</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+      <li><a href="/about">About</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2019-03-10T01:49:03.000Z"><a href="/2019/03/10/Git-usage-specification/">2019-03-10</a></time>
+      
+      
+  
+    <h1 class="title">Git usage specification</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="基于SPRINGBOOT的GIT使用规范"><a href="#基于SPRINGBOOT的GIT使用规范" class="headerlink" title="基于SPRINGBOOT的GIT使用规范"></a>基于SPRINGBOOT的GIT使用规范</h1><h2 id="通用分支规范"><a href="#通用分支规范" class="headerlink" title="通用分支规范"></a>通用分支规范</h2><p>创建两个永久分支</p>
+<ul>
+<li><em>master</em>分支，该分支为生产环境主干分支，UAT环境及生成环境需要使用该分支进行发布。限制只有管理者才能审核、修改及合并其他提交到该分支，其他成员需要创建<em>pull request</em>提交请求把代码合并到该分支</li>
+<li><em>develop</em>分支，该分支为当前版本开发环境分支，开发环境和SIT环境使用该分支进行发布，团队成员均提交代码。</li>
+</ul>
+<p>创建其他临时分支</p>
+<ul>
+<li><em>release</em>分支，该分支为生产环境对应的分支，主要是为了修改生产环境对应的<em>bug</em>，修改验证完成后需要<em>merge</em>回到主干分支，并进行删除。</li>
+<li><em>feature</em>分支，该分支为功能开发分支，针对不同的功能点可以拉取多个不同的<em>feature</em>分支，开发完成后合并回到<em>develop</em>分支，并进行删除。</li>
+<li><em>bug</em>分支，该分支主要是用于修改开发过程中的<em>bug</em>，可以拉取多个，合并回到<em>develop</em>后删除。</li>
+</ul>
+<h2 id="分支合并过程"><a href="#分支合并过程" class="headerlink" title="分支合并过程"></a>分支合并过程</h2><h3 id="通用分支合并过程"><a href="#通用分支合并过程" class="headerlink" title="通用分支合并过程"></a>通用分支合并过程</h3><p>比如说<em>feature-group</em>分支需要合并回到<em>develop</em>分支,首先把<em>feature-group</em>分支所有修改<em>commit</em>以后，切换回到<em>develop</em>分支进行合并</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git merge feature-group</span><br></pre></td></tr></table></figure>
+<h3 id="分支合并回到master分支流程"><a href="#分支合并回到master分支流程" class="headerlink" title="分支合并回到master分支流程"></a>分支合并回到<em>master</em>分支流程</h3><p>如果使用<em>gitlab</em>相关工具，可以在网站中发起<em>Pull Request</em>，提交管理员审核后合并。如果存在冲突，比如<em>develop</em>分支合并回到<em>master</em>分支冲突，需要手工解决冲突。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git pull $&#123;GIT_URL&#125; develop</span><br><span class="line"># solved conflicts and commit</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h2 id="提交规范"><a href="#提交规范" class="headerlink" title="提交规范"></a>提交规范</h2><p>为了防止冲突，需要针对<em>springboot</em>增加一下<em>.gitignore</em>的内容，团队目前使用的工具有<em>Intellj IDEA</em>和<em>maven</em>，配置文件是<strong>.properties*和</strong>.yml*</p>
+<p>基本的<em>.gitignore</em>文件如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/target/</span><br><span class="line">!.mvn/wrapper/maven-wrapper.jar</span><br><span class="line"></span><br><span class="line">### IntelliJ IDEA ###</span><br><span class="line">.idea</span><br><span class="line">*.iws</span><br><span class="line">*.iml</span><br><span class="line">*.ipr</span><br><span class="line">**.iml</span><br><span class="line"></span><br><span class="line">### Sprint Boot ###</span><br><span class="line">*.properties</span><br><span class="line">*.yml</span><br></pre></td></tr></table></figure>
+<p>其中忽略了配置文件是<strong>.properties*和</strong>.yml*，主要原因是团队成员经常性提交错误的配置文件导致持续集成没法跑起来。是否默认忽略配置文件仁者见仁智者见智，主要看团队成员情况。在忽略的前提下，如果需要修改配置文件，可以使用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add -f $&#123;YOUR_CONFIGURE_FILE&#125;</span><br></pre></td></tr></table></figure>
+<p>进行强制提交</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/git/">git</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://bertrand319.github.io/2019/03/10/Git-usage-specification/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/git/">git</a><small>1</small></li>
+  
+    <li><a href="/tags/区块链/">区块链</a><small>1</small></li>
+  
+    <li><a href="/tags/计划/">计划</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2019 Bertrand Huang
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

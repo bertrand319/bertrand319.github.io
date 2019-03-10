@@ -54,6 +54,194 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2019-03-10T01:49:03.000Z"><a href="/2019/03/10/Git-usage-specification/">2019-03-10</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/03/10/Git-usage-specification/">Git usage specification</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="基于SPRINGBOOT的GIT使用规范"><a href="#基于SPRINGBOOT的GIT使用规范" class="headerlink" title="基于SPRINGBOOT的GIT使用规范"></a>基于SPRINGBOOT的GIT使用规范</h1><h2 id="通用分支规范"><a href="#通用分支规范" class="headerlink" title="通用分支规范"></a>通用分支规范</h2><p>创建两个永久分支</p>
+<ul>
+<li><em>master</em>分支，该分支为生产环境主干分支，UAT环境及生成环境需要使用该分支进行发布。限制只有管理者才能审核、修改及合并其他提交到该分支，其他成员需要创建<em>pull request</em>提交请求把代码合并到该分支</li>
+<li><em>develop</em>分支，该分支为当前版本开发环境分支，开发环境和SIT环境使用该分支进行发布，团队成员均提交代码。</li>
+</ul>
+<p>创建其他临时分支</p>
+<ul>
+<li><em>release</em>分支，该分支为生产环境对应的分支，主要是为了修改生产环境对应的<em>bug</em>，修改验证完成后需要<em>merge</em>回到主干分支，并进行删除。</li>
+<li><em>feature</em>分支，该分支为功能开发分支，针对不同的功能点可以拉取多个不同的<em>feature</em>分支，开发完成后合并回到<em>develop</em>分支，并进行删除。</li>
+<li><em>bug</em>分支，该分支主要是用于修改开发过程中的<em>bug</em>，可以拉取多个，合并回到<em>develop</em>后删除。</li>
+</ul>
+<h2 id="分支合并过程"><a href="#分支合并过程" class="headerlink" title="分支合并过程"></a>分支合并过程</h2><h3 id="通用分支合并过程"><a href="#通用分支合并过程" class="headerlink" title="通用分支合并过程"></a>通用分支合并过程</h3><p>比如说<em>feature-group</em>分支需要合并回到<em>develop</em>分支,首先把<em>feature-group</em>分支所有修改<em>commit</em>以后，切换回到<em>develop</em>分支进行合并</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop</span><br><span class="line">git merge feature-group</span><br></pre></td></tr></table></figure>
+<h3 id="分支合并回到master分支流程"><a href="#分支合并回到master分支流程" class="headerlink" title="分支合并回到master分支流程"></a>分支合并回到<em>master</em>分支流程</h3><p>如果使用<em>gitlab</em>相关工具，可以在网站中发起<em>Pull Request</em>，提交管理员审核后合并。如果存在冲突，比如<em>develop</em>分支合并回到<em>master</em>分支冲突，需要手工解决冲突。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git pull $&#123;GIT_URL&#125; develop</span><br><span class="line"># solved conflicts and commit</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h2 id="提交规范"><a href="#提交规范" class="headerlink" title="提交规范"></a>提交规范</h2><p>为了防止冲突，需要针对<em>springboot</em>增加一下<em>.gitignore</em>的内容，团队目前使用的工具有<em>Intellj IDEA</em>和<em>maven</em>，配置文件是<strong>.properties*和</strong>.yml*</p>
+<p>基本的<em>.gitignore</em>文件如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/target/</span><br><span class="line">!.mvn/wrapper/maven-wrapper.jar</span><br><span class="line"></span><br><span class="line">### IntelliJ IDEA ###</span><br><span class="line">.idea</span><br><span class="line">*.iws</span><br><span class="line">*.iml</span><br><span class="line">*.ipr</span><br><span class="line">**.iml</span><br><span class="line"></span><br><span class="line">### Sprint Boot ###</span><br><span class="line">*.properties</span><br><span class="line">*.yml</span><br></pre></td></tr></table></figure>
+<p>其中忽略了配置文件是<strong>.properties*和</strong>.yml*，主要原因是团队成员经常性提交错误的配置文件导致持续集成没法跑起来。是否默认忽略配置文件仁者见仁智者见智，主要看团队成员情况。在忽略的前提下，如果需要修改配置文件，可以使用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add -f $&#123;YOUR_CONFIGURE_FILE&#125;</span><br></pre></td></tr></table></figure>
+<p>进行强制提交</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2019-02-23T15:26:12.000Z"><a href="/2019/02/23/会议要点/">2019-02-23</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/02/23/会议要点/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="会议要点"><a href="#会议要点" class="headerlink" title="会议要点"></a>会议要点</h1><ol>
+<li>季节3月21日，6月21日，9月21日，12月31日，日切需要特殊处理</li>
+<li>行方日切10点半</li>
+</ol>
+<ol>
+<li>长假第三方支付是否可以当天把钱打过来</li>
+<li>大额关闭的时候小额的上限调整到50万</li>
+<li>三方协议，入网材料</li>
+<li>如果还款文件和实际余额有问题，需要行方进行垫支入账先把这个后面处理</li>
+</ol>
+<h2 id="工作量"><a href="#工作量" class="headerlink" title="工作量"></a>工作量</h2><ol>
+<li>提前还款试算</li>
+<li>违约金需要计算</li>
+<li>影像文件需要通知信贷系统</li>
+<li></li>
+</ol>
+<h2 id="离线文件"><a href="#离线文件" class="headerlink" title="离线文件"></a>离线文件</h2><ol>
+<li>平台9点给到</li>
+<li>入账文件是在凌晨1点会给到资产前置</li>
+<li>逾期还款计划文件是凌晨2点提供</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2019-02-23T09:54:42.000Z"><a href="/2019/02/23/青训计划/">2019-02-23</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/02/23/青训计划/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="青训计划"><a href="#青训计划" class="headerlink" title="青训计划"></a>青训计划</h1><h2 id="项目目标"><a href="#项目目标" class="headerlink" title="项目目标"></a>项目目标</h2><ol>
+<li>帮助工程师技能转型</li>
+<li>提升骨干员工核心竞争力</li>
+</ol>
+<h2 id="技能转型实施路径"><a href="#技能转型实施路径" class="headerlink" title="技能转型实施路径"></a>技能转型实施路径</h2><p>一期目标帮助前端工程师快速转型到后端工程师</p>
+<p>为了保证目标实现，需要做到几点：</p>
+<ol>
+<li>明确的任务项及时间节点，需要产出知识分布的思维导图</li>
+<li>每个任务项有明确验收标准，需要设立审核人员</li>
+<li>评估合适转型的人员，不能一棒子，需要确认评估标准</li>
+<li>在绩效考核上需要做出适当的倾斜</li>
+</ol>
+<p>为实现该目标，涉及到以下配合角色</p>
+<ol>
+<li>任务编写者，需要安排团队资深人员进行编写，可以考虑一下近期离职员工，结合他们的交接计划做好这项工作。</li>
+<li>审核者，通过简单面谈审核的方式去了解转型人员是否达到目标，可以简单设立一下面谈题目的方式。</li>
+<li>能力评估者，通过360度访谈的方式来进行了解人员素质。</li>
+</ol>
+<h2 id="提升骨干员工核心"><a href="#提升骨干员工核心" class="headerlink" title="提升骨干员工核心"></a>提升骨干员工核心</h2>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2019-02-18T11:58:27.000Z"><a href="/2019/02/18/JWT简介/">2019-02-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/02/18/JWT简介/">JWT简介</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2019-02-16T16:18:00.000Z"><a href="/2019/02/17/能力象限图/">2019-02-17</a></time>
       
       
@@ -312,6 +500,8 @@
 <div class="widget tag">
   <h3 class="title">Tags</h3>
   <ul class="entry">
+  
+    <li><a href="/tags/git/">git</a><small>1</small></li>
   
     <li><a href="/tags/区块链/">区块链</a><small>1</small></li>
   
