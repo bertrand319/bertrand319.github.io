@@ -54,6 +54,160 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2019-03-24T03:34:20.000Z"><a href="/2019/03/24/Setup-dual-network-interface-under-windows-10/">2019-03-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/03/24/Setup-dual-network-interface-under-windows-10/">Setup dual network interface under windows 10</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h1><p>最近团队很多人在银行驻场开发，银行网络管控比较严格，只有登记mac地址才能接入他们的网络，接入以后无法访问外网。为了能在酒店也可以查看日志，需要一条通道访问到银行内部网络。</p>
+<h1 id="内网穿透"><a href="#内网穿透" class="headerlink" title="内网穿透"></a>内网穿透</h1><p>由于接入网络的机器都是windows，如果机器有外网地址，可以通过远程桌面进行访问。提供远程域名可以直接购买花生壳服务，也可以使用vps然后使用ssh反向穿透。这里使用frp来进行操作，也是需要一台具有外网IP的vps进行中转。 </p>
+<h2 id="frp服务端配置"><a href="#frp服务端配置" class="headerlink" title="frp服务端配置"></a>frp服务端配置</h2><p>到<a href="https://github.com/fatedier/frp/releases" target="_blank" rel="noopener">frp下载地址</a>进行下载，解压后可以只需要配置一下<em>frps.ini</em>文件 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">bind_port = 8320</span><br></pre></td></tr></table></figure>
+<p>我这边设置为8320端口，然后运行起来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x frps</span><br><span class="line">./frps -c frps.ini</span><br></pre></td></tr></table></figure>
+<p>启动完成后确保一下vps的防火墙都开发就好</p>
+<h2 id="frp客户端配置"><a href="#frp客户端配置" class="headerlink" title="frp客户端配置"></a>frp客户端配置</h2><p>同样到<a href="https://github.com/fatedier/frp/releases" target="_blank" rel="noopener">frp下载地址</a>进行下载，解压后需要配置一下<em>frpc.ini</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">server_addr = &#123;VPS IP&#125;</span><br><span class="line">server_port = 8320</span><br><span class="line"></span><br><span class="line">[ssh]</span><br><span class="line">type = tcp</span><br><span class="line">local_ip = 127.0.0.1</span><br><span class="line">local_port = 3389</span><br><span class="line">remote_port = 3389</span><br></pre></td></tr></table></figure>
+<p>这里配置表示把访问远程VPS IP的3389端口转向本机的3389端口，3389是windows远程桌面默认端口。进入到cmd，使用命令启动起来就好  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frpc.exe -c frpc.ini</span><br></pre></td></tr></table></figure>
+<p>启动完成后，还需要开启windows的远程桌面链接，这里不详细说了。</p>
+<h1 id="双网卡配置"><a href="#双网卡配置" class="headerlink" title="双网卡配置"></a>双网卡配置</h1><p>实际上我这边购买了华为的wifimini上网卡托做了实验，模拟本地以太网和WIFI双网卡同时链接的情况。</p>
+<h2 id="路由配置"><a href="#路由配置" class="headerlink" title="路由配置"></a>路由配置</h2><p>由于需要修改路由规则，使用管理员方式打开cmd，具体就是在开始点击鼠标右键，在弹出的菜单栏里面选择。使用以下命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route print -4</span><br></pre></td></tr></table></figure>
+<p>打印IPv4的活动路由，网络地址<em>0.0.0.0</em>会出现两条路由规则，我这边如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>接口编号</th>
+<th>接口名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>Remote NDIS based Internet Sharing Device</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Inter(R) Dual Band Wireless-AC 7265</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>网络目标</th>
+<th>网络掩码</th>
+<th>网关</th>
+<th>接口</th>
+<th>跃点数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.0.0.0</td>
+<td>0.0.0.0</td>
+<td>192.168.3.1</td>
+<td>192.168.3.109</td>
+<td>25</td>
+</tr>
+<tr>
+<td>0.0.0.0</td>
+<td>0.0.0.0</td>
+<td>192.168.8.1</td>
+<td>192.168.8.100</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<p>由于针对同一个地址有两条路由规则，实际上寻址的时候回采用跃点数更少的路由规则（跃点数可以理解为传递报文需要进过的跳数，通常都是跳数更少的路由会更优）</p>
+<p>其中<em>192.168.3.1</em>这个是可以访问外网的网关， <em>192.168.8.1</em>是访问内网的网关，为了可以访问外网，可以通过删除第二条路由规则或修改第二条路由跃点数方式让windows选择第一条路由  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route delete 0.0.0.0 192.168.8.1 if 8</span><br><span class="line">route change 0.0.0.0 mask 0.0.0.0 192.168.8.1 metric 20 if 8</span><br></pre></td></tr></table></figure>
+<p>其中<em>if 8</em>表示指定修改接口编号8号设备的路由规则，两个命令任意一个命令都行，第二命令是把第二条路由规则的跃点数增加20。</p>
+<p>修改完成后，可以通过外网IP进行外网访问了。</p>
+<h2 id="DNS配置"><a href="#DNS配置" class="headerlink" title="DNS配置"></a>DNS配置</h2><p>由于双网卡，两个地址使用的DNS服务器不一样，从实验的结果看来windows会默认使用以太网的DNS服务器进行域名解析，而且只能使用一个DNS服务器配置。使用<em>ipconfig /all</em>查看DNS服务地址</p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>DNS服务地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本地以太网</td>
+<td>192.168.8.1</td>
+</tr>
+<tr>
+<td>WIFI</td>
+<td>192.168.3.1</td>
+</tr>
+</tbody>
+</table>
+<p>由于以太网（对应内网）的DNS无法解析外网域名，所以只能优先使用WIFI所对应的DNS服务器解析，在网络连接处把本地以太网的DNS服务器设置成<em>192.168.3.1</em>，设置完成后发觉路由规则给重置，需要重新配置一下路由规则。这时候使用域名可以访问外网，但内部域名无法访问。</p>
+<p>为了访问内网域名，需要把相关内网域名和对应的IP地址写死到<em>hosts</em>文件。这个文件通常在<em>C:\Windows\System32\druvers\etc</em>下面。假设想在想访问内网域名<em>abc.com</em>，对应的地址是<em>192.168.8.109</em>，则修改<em>hosts</em>文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.8.109 	abc.com</span><br></pre></td></tr></table></figure>
+<p>其他内网域名也是类似。</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>如果配置过程中有问题可以使用<em>ping</em>和<em>tracert</em>两个命令，第一个可以确认一下DNS解析是否正常，第二个确认一下到达目标IP是按我们设置的路由规则走了。另外，由于内部网络可能会有很多个网段，可以根据实际情况添加相关路由。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2019-03-24T03:14:56.000Z"><a href="/2019/03/24/Add-Analytics-To-Hexo/">2019-03-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2019/03/24/Add-Analytics-To-Hexo/">Add Analytics To Hexo</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2019-03-22T14:16:51.000Z"><a href="/2019/03/22/Java-Performance-Tools/">2019-03-22</a></time>
       
       
@@ -451,6 +605,8 @@
   <ul class="entry">
   
     <li><a href="/tags/git/">git</a><small>1</small></li>
+  
+    <li><a href="/tags/route/">route</a><small>1</small></li>
   
     <li><a href="/tags/区块链/">区块链</a><small>1</small></li>
   
